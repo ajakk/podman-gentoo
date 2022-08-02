@@ -27,10 +27,10 @@ RUN eselect news read >/dev/null
 CMD \"/bin/bash\""
 
 PODMAN_ARGS="--cap-add=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_SYS_PTRACE
---volume ${1}/:/etc/portage
+--volume ${2}/:/etc/portage
 --volume /var/cache/distfiles:/var/cache/distfiles
 --volume /var/db/repos:/var/db/repos
---volume ${2}:/var/cache/binpkgs"
+--volume ${3}:/var/cache/binpkgs"
 
 target="gentoo/stage3:systemd"
 
@@ -44,4 +44,4 @@ fi
 echo "${DOCKERFILE}" | sed "s FROMIMAGE ${target} " | podman build --squash-all ${PODMAN_ARGS} --tag "localhost/${1}" -f - || exit
 
 podman image prune -f
-podman push --tls-verify=false "localhost/${1}" "${3}/${1}:latest"
+podman push --tls-verify=false "localhost/${1}" "${4}/${1}:latest"

@@ -18,6 +18,7 @@ RUN mkdir -p /etc/portage/env
 RUN mkdir -p /etc/portage/package.env
 
 ENV MAKEOPTS=\"-j${jobs} -l${jobs}\"
+ENV PORTAGE_SCHEDULING_POLICY=idle
 RUN emerge -vuDN @world --with-bdeps=y --quiet=y --buildpkg --usepkg
 RUN perl-cleaner --all
 RUN emerge --depclean

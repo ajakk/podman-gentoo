@@ -5,7 +5,7 @@ if [[ -z ${1} ]]; then
     exit 1
 fi
 
-jobs=$(($(nproc)/2))
+jobs=$(($(nproc)/4))
 
 DOCKERFILE="\
 FROM FROMIMAGE

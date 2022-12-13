@@ -43,7 +43,7 @@ else
 fi
 
 # TODO: why is --pull always necessary? This should be the default.
-echo "${DOCKERFILE}" | sed "s FROMIMAGE ${target} " | podman build --pull always --squash-all ${PODMAN_ARGS} --tag "localhost/${1}" -f - || exit
+echo "${DOCKERFILE}" | sed "s FROMIMAGE ${target} " | podman build --pull=always --squash-all ${PODMAN_ARGS} --tag "localhost/${1}" -f - || exit
 
 podman image prune -f
 podman push --tls-verify=false "localhost/${1}" "${4}/${1}:latest"

@@ -40,10 +40,10 @@ if [[ -n $(podman images localhost/${1} -q) ]] 2>&1 >/dev/null; then
     target="localhost/${1}"
 else
     echo "Building ${1}"
+    podamn pull "${target}"
 fi
 
-# TODO: why is --pull always necessary? This should be the default.
-echo "${DOCKERFILE}" | sed "s FROMIMAGE ${target} " | podman build --pull=always --squash-all ${PODMAN_ARGS} --tag "localhost/${1}" -f - || exit
+echo "${DOCKERFILE}" | sed "s FROMIMAGE ${target} " | podman build --squash-all ${PODMAN_ARGS} --tag "localhost/${1}" -f - || exit
 
 podman image prune -f
 podman push --tls-verify=false "localhost/${1}" "${4}/${1}:latest"

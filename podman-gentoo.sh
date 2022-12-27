@@ -35,7 +35,7 @@ PODMAN_ARGS="--cap-add=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_SYS_PTRACE
 
 target="gentoo/stage3:systemd"
 
-if [[ -n $(podman images localhost/${1} -q) ]] 2>&1 >/dev/null; then
+if [[ -n $(podman images localhost/${1} -q) ]]; then
     echo "Rebuilding ${1}"
     target="localhost/${1}"
 else

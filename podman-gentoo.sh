@@ -40,7 +40,7 @@ if [[ -n $(podman images localhost/${1} -q) ]] 2>&1 >/dev/null; then
     target="localhost/${1}"
 else
     echo "Building ${1}"
-    podamn pull "${target}"
+    podman pull "${target}"
 fi
 
 echo "${DOCKERFILE}" | sed "s FROMIMAGE ${target} " | podman build --squash-all ${PODMAN_ARGS} --tag "localhost/${1}" -f - || exit

@@ -24,7 +24,6 @@ RUN perl-cleaner --all
 RUN emerge --depclean
 RUN emerge @preserved-rebuild
 RUN eselect news read >/dev/null
-RUN eclean-pkg --deep --changed-deps --quiet
 
 CMD \"/bin/bash\""
 

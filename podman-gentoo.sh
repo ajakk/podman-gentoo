@@ -7,27 +7,26 @@ fi
 
 jobs=$(($(nproc)/4))
 
-DOCKERFILE=(
-    FROM FROMIMAGE
+DOCKERFILE="\
+FROM FROMIMAGE
 
-    ENV FEATURES "binpkg-multi-instance"
+ENV FEATURES \"binpkg-multi-instance\"
 
-    RUN ln -srf /etc/portage/world /var/lib/portage/world
-    RUN mkdir -p /etc/portage/package.unmask
-    RUN mkdir -p /etc/portage/env
-    RUN mkdir -p /etc/portage/package.env
+RUN ln -srf /etc/portage/world /var/lib/portage/world
+RUN mkdir -p /etc/portage/package.unmask
+RUN mkdir -p /etc/portage/env
+RUN mkdir -p /etc/portage/package.env
 
-    ENV MAKEOPTS="-j${jobs} -l${jobs}"
-    ENV PORTAGE_SCHEDULING_POLICY=idle
-    RUN emerge --verbose --quiet=y sys-apps/merge-usr \&\& merge-usr
-    RUN emerge -vuDN @world --with-bdeps=y --quiet=y --buildpkg --usepkg --changed-deps=y --backtrack=1000 --keep-going=y
-    RUN perl-cleaner --all
-    RUN emerge --depclean
-    RUN emerge @preserved-rebuild
-    RUN eselect news read \>/dev/null
+ENV MAKEOPTS=\"-j${jobs} -l${jobs}\"
+ENV PORTAGE_SCHEDULING_POLICY=idle
+RUN emerge --verbose --quiet=y sys-apps/merge-usr && merge-usr
+RUN emerge -vuDN @world --with-bdeps=y --quiet=y --buildpkg --usepkg --changed-deps=y --backtrack=1000 --keep-going=y
+RUN perl-cleaner --all
+RUN emerge --depclean
+RUN emerge @preserved-rebuild
+RUN eselect news read >/dev/null
 
-    CMD "/bin/bash"
-)
+CMD \"/bin/bash\""
 
 PODMAN_ARGS=(
     --cap-add=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_SYS_PTRACE
@@ -47,7 +46,7 @@ else
     podman pull "${target}"
 fi
 
-echo "${DOCKERFILE[@]}" | sed "s FROMIMAGE ${target} " | podman build --squash-all "${PODMAN_ARGS[@]}" --tag "localhost/${1}" -f - || exit
+echo "${DOCKERFILE}" | sed "s FROMIMAGE ${target} " | podman build --squash-all "${PODMAN_ARGS[@]}" --tag "localhost/${1}" -f - || exit
 
 podman image prune -f
 podman push --tls-verify=false "localhost/${1}" "${4}/${1}:latest"

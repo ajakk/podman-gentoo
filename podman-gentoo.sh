@@ -35,7 +35,7 @@ PODMAN_ARGS=(
     --volume "${3}":/var/cache/binpkgs
 )
 
-target="gentoo/stage3:systemd"
+target="gentoo/stage3:amd64-systemd-mergedusr"
 
 if [[ -n $(podman images localhost/${1} -q) ]]; then
     echo "Rebuilding ${1}"

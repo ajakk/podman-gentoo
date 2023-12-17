@@ -19,7 +19,7 @@ RUN mkdir -p /etc/portage/package.env
 
 ENV MAKEOPTS=\"-j${jobs} -l${jobs}\"
 ENV PORTAGE_SCHEDULING_POLICY=idle
-RUN emerge --verbose --quiet=y sys-apps/merge-usr && merge-usr
+RUN emerge --oneshot --verbose --quiet=y sys-apps/merge-usr && merge-usr
 RUN emerge -vuDN @world --with-bdeps=y --quiet=y --buildpkg --usepkg --changed-deps=y --backtrack=1000 --keep-going=y
 RUN perl-cleaner --all
 RUN emerge --depclean

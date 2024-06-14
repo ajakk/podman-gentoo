@@ -5,7 +5,7 @@ if [[ -z ${1} ]]; then
     exit 1
 fi
 
-jobs=$(($(nproc)/4))
+JOBS=$(($(nproc)/2))
 
 DOCKERFILE="\
 FROM FROMIMAGE
@@ -17,7 +17,7 @@ RUN mkdir -p /etc/portage/package.unmask
 RUN mkdir -p /etc/portage/env
 RUN mkdir -p /etc/portage/package.env
 
-ENV MAKEOPTS=\"-j${jobs} -l${jobs}\"
+ENV MAKEOPTS=\"-j${JOBS} -l${JOBS}\"
 ENV PORTAGE_SCHEDULING_POLICY=idle
 RUN emerge --oneshot --noreplace --verbose --quiet=y sys-apps/merge-usr && merge-usr
 RUN emerge -vuDN @world --with-bdeps=y --quiet=y --buildpkg --usepkg --changed-deps=y --backtrack=1000 --keep-going=y

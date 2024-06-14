@@ -19,7 +19,6 @@ RUN mkdir -p /etc/portage/package.env
 
 ENV MAKEOPTS=\"-j${JOBS} -l${JOBS}\"
 ENV PORTAGE_SCHEDULING_POLICY=idle
-RUN emerge --oneshot --noreplace --verbose --quiet=y sys-apps/merge-usr && merge-usr
 RUN emerge -vuDN @world --with-bdeps=y --quiet=y --buildpkg --usepkg --changed-deps=y --backtrack=1000 --keep-going=y
 RUN perl-cleaner --all
 RUN emerge --depclean
@@ -36,7 +35,7 @@ PODMAN_ARGS=(
     --volume "${3}":/var/cache/binpkgs
 )
 
-target="gentoo/stage3:amd64-systemd-mergedusr"
+target="gentoo/stage3:amd64-systemd"
 
 if [[ -n $(podman images localhost/${1} -q) ]]; then
     echo "Rebuilding ${1}"
